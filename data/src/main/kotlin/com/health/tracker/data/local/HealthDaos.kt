@@ -76,10 +76,10 @@ interface MealEntryDao {
     fun observeRangeTotalKcal(from: Long, to: Long): Flow<Double>
 
     @Query(
-        "SELECT dateEpochDay AS epochDay, COALESCE(SUM(kcal), 0.0) AS kcal FROM meal_entry " +
+        "SELECT dateEpochDay AS epochDay, COALESCE(SUM(kcal), 0.0) AS kcal, COUNT(*) AS entries FROM meal_entry " +
             "WHERE dateEpochDay BETWEEN :from AND :to GROUP BY dateEpochDay ORDER BY dateEpochDay ASC"
     )
-    fun observeDailyTotals(from: Long, to: Long): Flow<List<DayKcalRow>>
+    fun observeDailyTotals(from: Long, to: Long): Flow<List<DayMealRow>>
 }
 
 @Dao
@@ -100,10 +100,11 @@ interface ActivityEntryDao {
     fun observeRangeTotalKcal(from: Long, to: Long): Flow<Double>
 
     @Query(
-        "SELECT dateEpochDay AS epochDay, COALESCE(SUM(kcal), 0.0) AS kcal FROM activity_entry " +
+        "SELECT dateEpochDay AS epochDay, COALESCE(SUM(kcal), 0.0) AS kcal, " +
+            "COALESCE(SUM(minutes), 0) AS minutes, COUNT(*) AS entries FROM activity_entry " +
             "WHERE dateEpochDay BETWEEN :from AND :to GROUP BY dateEpochDay ORDER BY dateEpochDay ASC"
     )
-    fun observeDailyTotals(from: Long, to: Long): Flow<List<DayKcalRow>>
+    fun observeDailyTotals(from: Long, to: Long): Flow<List<DayActivityRow>>
 }
 
 @Dao

@@ -51,6 +51,13 @@ data class AchievementUnlockEntity(
 )
 
 /** 聚合查询的投影行，不是表。 */
-data class DayKcalRow(val epochDay: Long, val kcal: Double)
+data class DayMealRow(val epochDay: Long, val kcal: Double, val entries: Int)
+
+data class DayActivityRow(
+    val epochDay: Long,
+    val kcal: Double,
+    val minutes: Int,
+    val entries: Int,
+)
 
 const val SINGLE_PROFILE_ID = 1L

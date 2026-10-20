@@ -21,16 +21,19 @@ class LedgerRepositoryImpl(
             activityDao.observeDailyTotals(from.toEpochDay(), to.toEpochDay()),
             weightDao.observeRawBetween(from.toEpochDay(), to.toEpochDay()),
         ) { meals, activities, weights ->
-            val intake = meals.associate { it.epochDay to it.kcal }
-            val exercise = activities.associate { it.epochDay to it.kcal }
+            val intake = meals.associateBy { it.epochDay }
+            val exercise = activities.associateBy { it.epochDay }
             val weight = weights.dailyLatest().associate { it.dateEpochDay to it.weightKg }
             val days = (intake.keys + exercise.keys + weight.keys).sorted()
             days.map { day ->
                 DayTotals(
                     date = LocalDate.ofEpochDay(day),
-                    intakeKcal = intake[day] ?: 0.0,
-                    exerciseKcal = exercise[day] ?: 0.0,
+                    intakeKcal = intake[day]?.kcal ?: 0.0,
+                    exerciseKcal = exercise[day]?.kcal ?: 0.0,
                     weightKg = weight[day],
+                    mealCount = intake[day]?.entries ?: 0,
+                    activityCount = exercise[day]?.entries ?: 0,
+                    exerciseMinutes = exercise[day]?.minutes ?: 0,
                 )
             }
         }

@@ -33,6 +33,9 @@ fun Double.signedKgText(): String {
 
 fun Double.percentText(): String = String.format(Locale.ROOT, "%.1f%%", this)
 
+/** 计数类指标：天、条、次、分钟。 */
+fun Double.countText(unit: String): String = "${roundToInt()} $unit"
+
 fun Double.bmiText(): String = String.format(Locale.ROOT, "%.1f", this)
 
 fun LocalDate.displayText(): String = format(dayFormatter)

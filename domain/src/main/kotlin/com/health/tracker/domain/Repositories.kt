@@ -9,6 +9,15 @@ data class DayTotals(
     val intakeKcal: Double,
     val exerciseKcal: Double,
     val weightKg: Double?,
+    val mealCount: Int = 0,
+    val activityCount: Int = 0,
+    val exerciseMinutes: Int = 0,
+)
+
+/** 一条已经拿到手的成就，带上解锁时刻，好显示"解锁于哪天"。 */
+data class AchievementUnlock(
+    val code: AchievementCode,
+    val atMillis: Long,
 )
 
 interface ProfileRepository {
@@ -43,6 +52,6 @@ interface LedgerRepository {
 }
 
 interface AchievementRepository {
-    fun observeUnlocked(): Flow<Set<AchievementCode>>
+    fun observeUnlocks(): Flow<List<AchievementUnlock>>
     suspend fun unlock(code: AchievementCode, progressValue: Double, atMillis: Long)
 }
